@@ -1,4 +1,7 @@
 let s:template_dir = '~/vim_template_files/'
+let s:check_files = [
+\   ['Makefile', 'import_Makefile'],
+\ ]
 
 
 function! tempura_warehouse#ImportTemplate(name, flag = 0) abort
@@ -45,11 +48,32 @@ function! tempura_warehouse#ExportTemplate(name) abort
 endfunction
 
 
-function! tempura_warehouse#AutoLoadTemplate(name) abort
-  let tempname = s:template_dir . 'template.' . a:name
+function! LoadTemplateNew(name) abort
+  let tempname = s:template_dir . a:name
   if glob(tempname) != ''
     execute '0read' tempname
     execute '$delete'
     call cursor(1, 1)
+  endif
+endfunction
+
+
+function! tempura_warehouse#AutoLoadTemplate(name) abort
+  let name_sp = split(a:name, '\.')
+  let load_flag = 0
+
+  for arr in s:check_files
+    if a:name == arr[0]
+      if arr[1] != ''
+        call LoadTemplateNew(arr[1])
+      endif
+
+      let load_flag = 1
+      break
+    endif
+  endfor
+
+  if load_flag == 0 && len(name_sp) > 1
+    call LoadTemplateNew('template.' . name_sp[-1])
   endif
 endfunction

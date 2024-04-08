@@ -10,5 +10,5 @@ command! -nargs=1 ExTpl call tempura_warehouse#ExportTemplate(<f-args>)
 
 aug auto_load_template
   au!
-  au BufNewFile * call tempura_warehouse#AutoLoadTemplate(expand('%:e'))
+  au BufNewFile * call tempura_warehouse#AutoLoadTemplate(expand('%'))
 aug END
